@@ -4,9 +4,12 @@ import boilerplate.java8.dao.AppDao;
 import boilerplate.java8.dao.AppDaoImpl;
 import boilerplate.java8.entity.Employee;
 import boilerplate.java8.repository.EmployeeRepository;
+import java.util.Arrays;
+import java.util.List;
 import org.seasar.doma.jdbc.Config;
 import org.seasar.doma.jdbc.JdbcLogger;
 import org.seasar.doma.jdbc.Slf4jJdbcLogger;
+import org.seasar.doma.jdbc.criteria.tuple.Tuple2;
 import org.seasar.doma.jdbc.dialect.Dialect;
 import org.seasar.doma.jdbc.dialect.H2Dialect;
 import org.seasar.doma.jdbc.tx.LocalTransactionDataSource;
@@ -27,9 +30,9 @@ public class Main {
     tm.required(
         () -> {
           EmployeeRepository repository = new EmployeeRepository(config);
-          Employee employee = repository.selectById(1);
-          employee.age += 1;
-          repository.update(employee);
+          List<Employee> list =
+              repository.selectByTuple2(Arrays.asList(new Tuple2<>(1, 0), new Tuple2<>(2, 0)));
+          list.forEach(System.out::println);
         });
   }
 

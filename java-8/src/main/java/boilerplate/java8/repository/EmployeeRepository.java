@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import org.seasar.doma.jdbc.Config;
 import org.seasar.doma.jdbc.criteria.Entityql;
+import org.seasar.doma.jdbc.criteria.tuple.Tuple2;
 
 public class EmployeeRepository {
 
@@ -24,6 +25,11 @@ public class EmployeeRepository {
   public Employee selectById(Integer id) {
     Employee_ e = new Employee_();
     return entityql.from(e).where(c -> c.eq(e.id, id)).fetchOne();
+  }
+
+  public List<Employee> selectByTuple2(List<Tuple2<Integer, Integer>> tuple2List) {
+    Employee_ e = new Employee_();
+    return entityql.from(e).where(c -> c.in(new Tuple2<>(e.id, e.version), tuple2List)).fetch();
   }
 
   public void insert(Employee employee) {
